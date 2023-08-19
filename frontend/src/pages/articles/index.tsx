@@ -1,16 +1,14 @@
 import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
-import data from "../../utils/dummydata";
+import axios from "axios";
 
 interface ArticlesInterface {
-  id: string;
   title: string;
   authors: string;
   source: string;
-  pubyear: string;
-  doi: string;
-  claim: string;
-  evidence: string;
+  publicationYear: number;
+  DOI: string;
+  summary: string;
 }
 
 type ArticlesProps = {
@@ -22,10 +20,9 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
       { key: "title", label: "Title" },
       { key: "authors", label: "Authors" },
       { key: "source", label: "Source" },
-      { key: "pubyear", label: "Publication Year" },
-      { key: "doi", label: "DOI" },
-      { key: "claim", label: "Claim" },
-      { key: "evidence", label: "Evidence" },
+      { key: "publicationYear", label: "Publication Year" },
+      { key: "DOI", label: "DOI" },
+      { key: "summary", label: "Claim" }
     ];
   
     return (
@@ -38,19 +35,11 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   };
   
   export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
+    
+    const articleResponse = await axios.get("http://localhost:3000/articles");
+
     // Map the data to ensure all articles have consistent property names
-    const articles = data.map((article) => ({
-      id: article.id ?? article._id,
-      title: article.title,
-      authors: article.authors,
-      source: article.source,
-      pubyear: article.pubyear,
-      doi: article.doi,
-      claim: article.claim,
-      evidence: article.evidence,
-    }));
-  
-  
+    const articles: any[] = articleResponse.data;
     return {
       props: {
         articles,
