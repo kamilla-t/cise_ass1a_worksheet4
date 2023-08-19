@@ -26,6 +26,7 @@ const NewDiscussion = () => {
     };
 
     await axios.post("http://localhost:3000/articles", article);
+    window.location.replace('http://localhost:5000/articles');
   };
 
   // Some helper methods for the authors array
